@@ -57,5 +57,5 @@ sun.context.cookie.setCookie(name,value);
 The arguments expiresValue type is int.
 
 ```
-sun.context.cookie.setCookieAndExpires('passId, 350350, 15);
+sun.context.cookie.setCookieAndExpires('passId', 350350, 15);
 ```
