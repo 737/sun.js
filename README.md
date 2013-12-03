@@ -1,7 +1,7 @@
 Sun.js Preview
 ==============
 
-Sun.js is a utility-belt library for JavaScript.And it will always constantly review and update.For Your Information.
+Sun.js is a utility-belt library for JavaScript.And it will always constantly review and update.For Your Information.:sunglasses:
 
 ### About namespace
 
