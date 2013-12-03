@@ -39,7 +39,7 @@ sun.context
 It will return the value of checking url.If name is null, then null will be returned.
 
 ```
- sun.context.getQueryStringByName('id');
+ sun.context.getQueryStringByName("id");
  => 10035
 ```
 
