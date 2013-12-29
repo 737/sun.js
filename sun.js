@@ -1,4 +1,67 @@
-﻿(function(){
+﻿//       /\\\\\\\\\\\\\\
+//       \/\\\//////////
+//        \/\\\
+//         \/\\\\\\\\\\\
+//          \/\\\///////
+//           \/\\\
+//            \/\\\
+//             \/\\\
+//              \///
+
+
+//       /\\\\\\\\\\\\
+//       \/////\\\////
+//            \/\\\
+//             \/\\\
+//              \/\\\
+//               \/\\\
+//                \/\\\
+//             /\\\\\\\\\\\\
+//             \////////////
+
+
+//         /\\\\\\\\\\\\
+//        /\\\//////////\\\
+//        \//\\\       \///
+//          \////\\\
+//              \////\\\
+//                  \///\\\
+//          /\\\       \//\\\
+//          \///\\\\\\\\\\\\/
+//             \////////////
+
+
+//         /\\\\\\\\\\\
+//        /\\\/////////\\\
+//        \/\\\       \///
+//         \/\\\
+//          \/\\\
+//           \/\\\
+//            \/\\\      /\\\
+//             \//\\\\\\\\\\\\
+//               \//////////
+
+
+//          /\\\\\\\\\\\\
+//          \/\\/////////
+//           \/\\\       
+//            \/\\\
+//             \/\\\\\\\\
+//              \/\//////
+//               \/\\\
+//                \/\/\\\\\\\\\\
+//                 \////////////
+
+
+// A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+// B D E F G H I 
+// 
+// 
+
+
+
+
+(function(){
     var console = window.console || {
             log : function(){}
         },
@@ -98,8 +161,8 @@ sun.ajax = function() {
             async: _isAsync,
             type: sType,
             url: sUrl,
-            data: _stringifyData(sType, oData),
-            contentType: 'application/json',
+            data: oData,//_stringifyData(sType, oData),
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
             dataType: sDataType,
             beforeSend: function(XMLHttpRequest) {
                 if (!!isShlowLoading) {
