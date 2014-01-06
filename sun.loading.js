@@ -63,7 +63,7 @@ var _loadingbar = function(){
     };
 
     self.start = function() {
-        var _url = sun.config.loading.cssPath + 'sun_loadingbar.css';
+        var _url = sun.loading.config.cssPath + 'sun_loadingbar.css';
 
         sun.load.css(_url, function() {
             setTimeout(_start, 1000)
@@ -119,7 +119,7 @@ var _loadCircle = function(){
     };
 
     self.start = function() {
-        var _url = sun.config.loading.cssPath + 'sun_loadcircle.css';
+        var _url = sun.loading.config.cssPath + 'sun_loadcircle.css';
 
         sun.load.css(_url, function() {
             setTimeout(_start, 1000)
@@ -134,6 +134,11 @@ var _loadCircle = function(){
 }();
 
 sun.loading = {
+    config : {
+        isWorking : true,
+        type : 'loadingbar',
+        cssPath : '/include/css/'
+    },
     loadingbar : _loadingbar,
     loadCircle : _loadCircle
 };

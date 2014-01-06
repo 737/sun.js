@@ -1,9 +1,5 @@
 ﻿var sun = sun || {};
 
-sun.config = {
-    cssLibUrl : '',
-};
-
 /**
  * it is for alex to shortcut method
  * delete before online
@@ -203,11 +199,15 @@ sun.ajax = function() {
         cache: true,
         global: true,
         headers: {},
+        timeout: 60000,
         statusCode: {},
         beforeSend: function(XMLHttpRequest) {
-            var _type = sun.config.loading['type'];
+            /* loading */
+            if ((!!sun.loading)&&(!!sun.loading.config.isWorking)) {
+                var _type = sun.loading.config['type'];
 
-            sun.loading[_type].start();
+                sun.loading[_type].start();
+            }
         },
         success: function(data, textStatus, XMLHttpRequest) {},
         error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -223,11 +223,11 @@ sun.ajax = function() {
         },
         complete: function(XMLHttpRequest, textStatus) {
             if (textStatus !== 'success') {
-                var _txt = '---------------- sun.ajax error -------------------'
+                var _txt = '---------------- sun.ajax complete -------------------'
                      + '\n\rstatus ---> ' + textStatus
                      + '\n\rdetail ---> ' + XMLHttpRequest.status + '  (' + XMLHttpRequest.statusText + ')'
-                     + '\n\rXMLHttpRequest ---> sun.ajax.lastXMLHttpRequest()'
-                     + '\n\r---------------- /sun.ajax error -------------------';
+                     + '\n\rXMLHttpRequest ---> ' + sun.ajax.lastXMLHttpRequest()
+                     + '\n\r---------------- /sun.ajax complete -------------------';
 
                 __XMLHttpRequest = XMLHttpRequest;
 
@@ -250,21 +250,26 @@ sun.ajax = function() {
         $.ajax({
             type: settings.type,
             url: settings.url,
+            data: settings.data,
             async: settings.async,
             cache: settings.cache,
             global: settings.global,
             headers: settings.headers,
             statusCode: settings.statusCode,
             dataType : settings.dataType,
+            timeout: settings.timeout,
             /* Deafult Ajax Event */
             beforeSend: settings.beforeSend,
             success: settings.success,        //请求成功后调用
             error: settings.error,
             complete: settings.complete,         //请求完成后调用
         }).always(function() {
-            var _type = sun.config.loading['type'];
+            /* loading */
+            if ((!!sun.loading)&&(!!sun.loading.config.isWorking)) {
+                var _type = sun.loading.config['type'];
 
-            sun.loading[_type].end();
+                sun.loading[_type].end();
+            }
         }).done(function(data, textStatus, XMLHttpRequest) {     //请求成功后调用(deferred对象的方法)
             if (typeof settings.done === 'function') {
                 settings.done(data, textStatus, XMLHttpRequest);
@@ -393,59 +398,84 @@ sun.context.getQueryStringByName = function(name) {
     return result[1];
 };
 
-sun.context.cookie = sun.context.cookie || {};
-// article detail http://www.cnblogs.com/Darren_code/archive/2011/11/24/Cookie.html
-sun.context.cookie.setExpires = function (name,value,expiresValue){
-    var Days = expiresValue; 
-    var exp  = new Date();    //new Date("December 31, 9998");
+sun.context.cookie = (function(){
+    // .eg article detail http://www.cnblogs.com/Darren_code/archive/2011/11/24/Cookie.html
+    var self  = {};
+
+    self.setExpires = function (name,value,expiresValue){
+        var Days = expiresValue; 
+        var exp  = new Date();    //new Date("December 31, 9998");
+        
+        exp.setTime(exp.getTime() + Days*24*60*60*1000);
+        document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
+    };
+
+    self.set = function (name,value){
+        var Days = 30; //此 cookie 将被保存 30 天
+        
+        this.setExpires(name, value, Days);
+    };
+
+    self.get = function (name){
+        var arr = document.cookie.match(new RegExp("(^| )"+name+"=([^;]*)(;|$)"));
+
+        if(arr != null) {
+            return unescape(arr[2]);
+        }
+        return null;
+    };
+
+    self.getAll = function() {
+        return document.cookie;
+    };
+
+    self.del = function (name){
+        var exp = new Date();
+        var cval= this.get(name);
+
+        exp.setTime(exp.getTime() - 1);
+        if(cval!=null) {
+            document.cookie= name + "="+cval+";expires="+exp.toGMTString();
+        }
+    };
+
+    return self;
+})();
+
+sun.context.localStorage = (function(global) {
     
-    exp.setTime(exp.getTime() + Days*24*60*60*1000);
-    document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
-};
-sun.context.cookie.set = function (name,value){
-    var Days = 30; //此 cookie 将被保存 30 天
-    
-    this.setExpires(name, value, Days);
-};
-sun.context.cookie.get = function (name){
-    var arr = document.cookie.match(new RegExp("(^| )"+name+"=([^;]*)(;|$)"));
+    var self = {
+        _ls : global.localStorage
+    };
 
-    if(arr != null) {
-        return unescape(arr[2]);
-    }
-    return null;
-};
-sun.context.cookie.del = function (name){
-    var exp = new Date();
-    var cval= this.get(name);
+    self.set = function(name, value) {
+        this._ls.setItem(name,value.toString())
+    };
 
-    exp.setTime(exp.getTime() - 1);
-    if(cval!=null) {
-        document.cookie= name + "="+cval+";expires="+exp.toGMTString();
-    }
-};
+    self.get = function(name) {
+        return this._ls.getItem(name);
+    };
+    self.getAll = function() {
+        return this._ls;
+    };
 
-sun.context.localStorage = sun.context.localStorage || {};
-sun.context.localStorage._ls = window.localStorage;
-sun.context.localStorage.set = function(name, value) {
-    this._ls.setItem(name,value.toString())
-};
-sun.context.localStorage.get  = function() {
-    return this._ls.getItem(name);
-};
-sun.context.localStorage.del = function(name) {
-    var val = this.get(name);
+    self.del = function(name) {
+        var val = this.get(name);
 
-    if (!!val) {
-        this.__ls.removeItem("c");
-    }
-};
-sun.context.localStorage.clearAll = function() {
-    window.localStorage.clear()
-};
+        if (!!val) {
+            this.__ls.removeItem("c");
+        }
+    };
+
+    self.clearAll = function() {
+        global.localStorage.clear()
+    };
+
+    return self;
+})(window);
 
 //-----------------------------  undealed  -----------------------------------
-function addEvent (type, element, fun) {
+function ___addEvent (type, element, fun) {
     if (element.addEventListener) {
         addEvent = function (type, element, fun) {
             element.addEventListener(type, fun, false);
