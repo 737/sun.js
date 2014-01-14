@@ -27,31 +27,27 @@ sun.util.array.sort = function(arrayList, isAsc) {
 };
 
 /**
- * >> ([0,1,2,3,4,5,6,7,8,9], 6)
- * => [0, 1, 2, 3, 4, 5, 7, 8, 9]
- * >> ([0,1,2,3,4,5,6,7,8,9], [2,6,8])
- * => [0, 1, 3, 4, 5, 7, 9]
+ * >> ([11,22,33,44], 3)
+ * => [11, 22, 44]
+ * >> ([11,22,33,44], [3,1])
+ * => [22, 44]
  */
-sun.util.array.remove = function(arrayList, n) {
-    //prototype为对象原型，注意这里为对象增加自定义方法的方法。
-    //concat方法：返回一个新数组，这个新数组是由两个或更多数组组合而成的。
-    //这里就是返回arrayList.slice(0,n)/arrayList.slice(n+1,arrayList.length)
-    //组成的新数组，这中间，刚好少了第n项。
-    //slice方法： 返回一个数组的一段，两个参数，分别指定开始和结束的位置。
-    if ( n < 0 || typeof n === 'undefined') {
+sun.util.array.removeAt = function(arrayList, numIndex) {
+    if ( numIndex <= 0 || typeof numIndex === 'undefined') {
         return arrayList;
-    } else if (sun.util.isArray(n)) {
-        var _tmp = null;
+    } else if (sun.util.isArray(numIndex)) {
+        var _index = 0;
 
-        n = this.sort(n, false);
+        numIndex = this.sort(numIndex, false);
 
-        for(index in n) {
-            arrayList = this.remove(arrayList, n[index]);
+        for(index in numIndex) {
+            _index = index - 1;
+            arrayList = this.removeAt(arrayList, numIndex[index]);
         }
 
         return arrayList;
     } else {
-        return arrayList.slice(0,n).concat(arrayList.slice(n+1,arrayList.length));
+        return arrayList.slice(0, numIndex - 1).concat(arrayList.slice(numIndex, arrayList.length));
     }
 };
 
@@ -97,7 +93,7 @@ sun.util.formatIntNum = function (amtStr) {
     renum = a1 + a2.substr(0, a2.length - j * 3) + renum + a3;
 
     return renum;
-}
+};
 
 /**
  * format number of money.
@@ -140,7 +136,7 @@ sun.util.formatFloat = function (amtStr, isCurrency) {
     renum = a1 + a2.substr(0, a2.length - j * 3) + renum + a3 + subfix;
 
     return renum;
-}
+};
 
 /**
  * >> (4)
@@ -309,3 +305,16 @@ sun.util.transforTime = function (time) {
     result += new Date(date).getMinutes();
     return result;
 };
+
+
+
+
+
+//数组删除任意位置
+// b = [1,2,3,4,5];
+// b.baoremove(5);
+// Array.prototype.baoremove = function(dx)
+// {
+//     if(isNaN(dx)||dx>this.length){return false;}
+//     this.splice(dx,1);
+// }

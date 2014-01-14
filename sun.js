@@ -369,6 +369,36 @@ sun.$ = function(query) {
     return document.querySelectorAll(query);
 };
 
+sun.key = (function() {
+    var self = {},
+        keys = {
+            'Esc' : 27
+            'Enter' : 13
+        },
+        keysEvent  = {
+
+        };
+
+    self.__init = function() {
+        document.addEventListener('keyup', function(evt) {
+            debugger;
+
+        });
+    };
+
+    self.set = function(keyName, fnCallBack) {
+
+    };
+
+    self.getKeycode = function() {
+
+    };
+
+    self.__init();
+
+    return self;
+})();
+
 
 // var __readyFuns = [];   
 // function DOMReady(){   
