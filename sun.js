@@ -1,5 +1,7 @@
 ﻿var sun = sun || {};
 
+sun.tag = {};
+
 /**
  * it is for alex to shortcut method
  * delete before online
@@ -372,33 +374,58 @@ sun.$ = function(query) {
 sun.key = (function() {
     var self = {},
         keys = {
-            'Esc' : 27
+            'Esc' : 27,
             'Enter' : 13
         },
         keysEvent  = {
 
-        };
+        },
+        lastKey = null;
 
     self.__init = function() {
         document.addEventListener('keyup', function(evt) {
-            debugger;
+            lastKey = evt;
+
+            var keyEvt = keysEvent[evt.keyCode];
+            if (!!keyEvt) {
+                for(var i = 0, max = keyEvt.length; i < max; i ++) {
+                    keyEvt[i]();
+                }
+            }
 
         });
     };
 
-    self.set = function(keyName, fnCallBack) {
+    //
+    self.set = function(keyCode, fnCallBack) {
+        if (typeof keyCode != 'number') {
+            return 'the Parameters -> keycode is number';
+        }
+        if (typeof fnCallBack != 'function') {
+            return 'the Parameters -> fnCallBack is function';
+        }
 
+        var evt = keysEvent[keyCode];
+        if (!!evt) {
+            evt.push(fnCallBack);
+        } else {
+            evt = [];
+
+            evt.push(fnCallBack);
+
+            keysEvent[keyCode] = evt;
+        }
     };
 
-    self.getKeycode = function() {
-
+    self.getLastKey = function() {
+        return lastKey;
     };
+
 
     self.__init();
 
     return self;
 })();
-
 
 // var __readyFuns = [];   
 // function DOMReady(){   

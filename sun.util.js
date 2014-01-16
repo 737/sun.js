@@ -26,14 +26,14 @@ sun.util.array.sort = function(arrayList, isAsc) {
     return arrayList.sort(sortNumber);
 };
 
-/**
- * >> ([11,22,33,44], 3)
- * => [11, 22, 44]
- * >> ([11,22,33,44], [3,1])
- * => [22, 44]
+/** sun.util.array.removeAt(arrayList, *numIndex) 
+ * >> ([0, 11,22,33,44], 3)
+ * => [0, 11, 22, 44]
+ * >> ([0, 11,22,33,44], [2, 1, 0])
+ * => [33, 44]
  */
 sun.util.array.removeAt = function(arrayList, numIndex) {
-    if ( numIndex <= 0 || typeof numIndex === 'undefined') {
+    if ( numIndex < 0 || typeof numIndex === 'undefined') {
         return arrayList;
     } else if (sun.util.isArray(numIndex)) {
         var _index = 0;
@@ -47,7 +47,48 @@ sun.util.array.removeAt = function(arrayList, numIndex) {
 
         return arrayList;
     } else {
-        return arrayList.slice(0, numIndex - 1).concat(arrayList.slice(numIndex, arrayList.length));
+        return arrayList.slice(0, numIndex).concat(arrayList.slice(numIndex + 1, arrayList.length));
+    }
+};
+
+/**
+ * (destination, *sources) 
+ * => ({a: 'a1', c: 1},{ b : 'b'}, { b: 'b1', c: 2})
+ * => {a: "a1", c: 2, b: "b1"}
+ */
+sun.util.extend = function(obj) {
+    this.each(arguments, function(source, index) {
+        if ((index != 0)&&(!!source)) {
+            for(var prop in source) {
+                obj[prop] = source[prop];
+            }
+        }
+    })
+
+    return obj;
+};
+
+/**
+ * >> ([3,2], function (v, i) { console.log(v, i) })
+ * => 3 0
+ * => 2 1
+ * >> ({ a : 'aa' , b : 'b2' }, function (v, i) { console.log(v, i) })
+ * => aa a
+ * => b2 b
+ */
+sun.util.each = function(obj, iterator) {
+    if ( obj === null) return;
+    if (typeof iterator === 'function') {
+        if (sun.util.isArray(obj)) {
+            for(var i = 0, max = obj.length; i < max; i++ ) {
+                iterator(obj[i], i);
+            }
+        } else if ( typeof obj === 'object') {
+            for(var item in obj ) {
+                iterator(obj[item], item);
+            }
+        }
+        
     }
 };
 
@@ -139,40 +180,6 @@ sun.util.formatFloat = function (amtStr, isCurrency) {
 };
 
 /**
- * >> (4)
- * => true
- * >> (3)
- * => false
- */
-sun.util.isEven = function(num) {
-    return num % 2 == 0 ? true : false;
-};
-
-/**
- * >> ([])
- * => true
- * >> ({})
- * => false
- */
-sun.util.isArray = function(arg) {
-    // first way:
-    return Object.prototype.toString.call(arg) === '[object Array]';
-
-    // second way:
-    //return (arr instanceof Array);
-};
-
-/**
- * >> ()
- * => "2013-12-04 10:49:25"
- * >> ('hh:mm:ss yy/MM/dd');
- * => "10:51:19 13/12/04"
- */
-sun.util.getCurrentTime = function(sStyle) {
-    return this.formatTime(sStyle, null);
-};
-
-/**
  * >> ('yy-MM-dd hh:mm')
  * => "2013-12-04 10:49:25"
  * >> ('yy-MM-dd hh:mm', '2013-12-23 18:33:22')
@@ -209,6 +216,40 @@ sun.util.formatTime = function (format, sTime) {
                 RegExp.$1.length == 1 ? o[k] :
                 ("00" + o[k]).substr(("" + o[k]).length));
     return format;
+};
+
+/**
+ * >> (4)
+ * => true
+ * >> (3)
+ * => false
+ */
+sun.util.isEven = function(num) {
+    return num % 2 == 0 ? true : false;
+};
+
+/**
+ * >> ([])
+ * => true
+ * >> ({})
+ * => false
+ */
+sun.util.isArray = function(arg) {
+    // first way:
+    return Object.prototype.toString.call(arg) === '[object Array]';
+
+    // second way:
+    //return (arr instanceof Array);
+};
+
+/**
+ * >> ()
+ * => "2013-12-04 10:49:25"
+ * >> ('hh:mm:ss yy/MM/dd');
+ * => "10:51:19 13/12/04"
+ */
+sun.util.getCurrentTime = function(sStyle) {
+    return this.formatTime(sStyle, null);
 };
 
 /**
