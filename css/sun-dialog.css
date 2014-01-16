@@ -49,6 +49,7 @@
     text-align: center;
 }
 #sun_dialog_wrap .dialogBtn {
+    cursor: pointer;
     width: inherit;
     display: inline-block;
     min-width: 45px;
@@ -68,11 +69,9 @@
     padding: 10px 0;
 }
 #sun_dialog_wrap.success table tr td img {
-    position: absolute;
-    bottom: 0;
-    left: 10px;
     width: 70px;
     max-height: 120px;
+    padding: 0 10px;
 }
 #sun_dialog_wrap.success table tr td label {
     line-height: 20px;

@@ -15,9 +15,13 @@
         var ELM_wrap = null,
             _defaultOPT = {
                 cssPath : '/include/css/',
-                title: '',
-                text: '',
-                image: ''
+                title: '::-**-::',
+                text: '--',
+                image: '',
+                ok: '好的',
+                get: '知道了',
+                callback: null,
+                type: 'get'  //   get => 我知道了,  ok => 好的， 我知道了
             };
 
         fnHtml = function() {
@@ -39,8 +43,8 @@
                       +         '<table>'
                       +             '<tbody>'
                       +                 '<tr>'
-                      +                     '<td><img src="' + opt.image + '"></td>'
-                      +                     '<td style="width:170px;">'
+                      +                     '{0}'
+                      +                     '<td >'
                       +                         '<label>' + opt.text + '</label>'
                       +                     '</td>'
                       +                 '</tr>'
@@ -50,16 +54,29 @@
                       +     '<footer>'
                       +         '<div class="box">'
                       +             '<div>'
-                      +                 '<a class="dialogBtn">知道了</a>'
+                      +                 '{1}'
                       +             '</div>'
                       +          '</div>'
                       +      '</footer>';
+
+            if (opt.image.length > 0) {
+                opt.cssPath = opt.cssPath;
+
+                opt.image = '<td><img src="' + opt.image + '"></td>';
+            }
+            
+            if (opt.type === 'ok') {
+                opt.get = '<a class="dialogBtn ok">' + opt.ok + '</a>&nbsp;&nbsp;<a class="dialogBtn">' + opt.get + '</a>';
+            } else {
+                opt.get = '<a class="dialogBtn">' + opt.get + '</a>';
+            }
 
             ELM_wrap = document.createElement('div');
             ELM_wrap.id = 'sun_dialog_wrap';
             ELM_wrap.className = 'success';
             ELM_wrap.style.zIndex = 1000;
 
+            html = sun.util.stringFormat(html, opt.image, opt.get);
             ELM_wrap.innerHTML = html;
 
             return ELM_wrap;
@@ -81,6 +98,15 @@
             if (!sun.tag.dialog_isBinded) {
                 $('body').on('click','.dialogBtn',  function(evt) {
                     fnClose();
+                    if (opt.type === 'ok') {
+                        if (($(this).hasClass("ok"))&&(typeof opt.callback === 'function')) {
+                            opt.callback();
+                        }
+                    } else {
+                        if(typeof opt.callback === 'function') {
+                            opt.callback();
+                        }
+                    }
                 });
                 sun.tag.dialog_isBinded = true;
             }

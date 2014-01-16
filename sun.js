@@ -371,6 +371,7 @@ sun.$ = function(query) {
     return document.querySelectorAll(query);
 };
 
+
 sun.key = (function() {
     var self = {},
         keys = {
@@ -389,10 +390,11 @@ sun.key = (function() {
             var keyEvt = keysEvent[evt.keyCode];
             if (!!keyEvt) {
                 for(var i = 0, max = keyEvt.length; i < max; i ++) {
-                    keyEvt[i]();
+                    if (typeof keyEvt[i] === 'function') {
+                        keyEvt[i]();
+                    }
                 }
             }
-
         });
     };
 
@@ -417,6 +419,21 @@ sun.key = (function() {
         }
     };
 
+    self.removeEvent = function(keyCode, fnCallBack) {
+        if ((keysEvent[keyCode].length > 0)&&(keysEvent[keyCode].indexOf(fnCallBack) > -1)) {
+            var index = keysEvent[keyCode].indexOf(fnCallBack);
+
+            keysEvent[keyCode][index] = null;
+        }
+
+    };
+
+    self.removeAllEvent = function(keyCode) {
+        if (keysEvent[keyCode].length > 0) {
+            keysEvent[keyCode] = [];
+        }
+    };
+
     self.getLastKey = function() {
         return lastKey;
     };
@@ -426,6 +443,7 @@ sun.key = (function() {
 
     return self;
 })();
+
 
 // var __readyFuns = [];   
 // function DOMReady(){   

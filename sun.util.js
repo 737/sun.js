@@ -299,6 +299,21 @@ sun.util.replaceAll = function (oString, AFindText, ARepText) {
     return oString.replace(raRegExp, ARepText);
 };
 
+sun.util.reload = function() {
+    window.location.reload();
+
+    /* other ways
+        1 history.go(0) 
+        2 location.reload() 
+        3 location=location 
+        4 location.assign(location) 
+        5 document.execCommand('Refresh') 
+        6 window.navigate(location) 
+        7 location.replace(location) 
+        8 document.URL=location.href 
+    */
+};
+
 /**
  * >> ('best {0} for {1}', 'wish', 'you')
  * => "best wish for you"
