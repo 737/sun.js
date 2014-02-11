@@ -255,6 +255,7 @@ sun.ajax = function() {
             data: settings.data,
             async: settings.async,
             cache: settings.cache,
+            contentType: settings.contentType,
             global: settings.global,
             headers: settings.headers,
             statusCode: settings.statusCode,
