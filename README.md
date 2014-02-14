@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 Sun.js Preview
 ==============
 
@@ -275,9 +274,3 @@ sun.util.stringFormat('best {0} for {1}', 'wish', 'you');
 
 
 
-=======
-sun.js
-======
-
-It is a utility-belt library for JavaScript.And it will always constantly review and update.For Your Information.
->>>>>>> d47bf9c6e6b70b56b4626e21921ec8b201f810d4
