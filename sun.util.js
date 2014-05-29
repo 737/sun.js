@@ -52,6 +52,37 @@ sun.util.array.removeAt = function(arrayList, numIndex) {
 };
 
 /**
+* 深入克隆
+* => { name : 'sun' }
+* => { name : 'sun' }
+*/
+sun.util.deepClone = function (jsonObj) {
+    var buf;
+
+    if (jsonObj instanceof Array) {
+        var i = jsonObj.length;
+
+        buf = [];
+        while (i--) {
+            buf[i] = this.deepClone(jsonObj[i]);
+        }
+
+        return buf;
+    } else if (jsonObj instanceof Object) {
+        buf = {};
+
+        for (var k in jsonObj) {
+            buf[k] = this.deepClone(jsonObj[k]);
+        }
+
+        return buf;
+    } else {
+        return jsonObj;
+    }
+};
+
+
+/**
  * (destination, *sources) 
  * => ({a: 'a1', c: 1},{ b : 'b'}, { b: 'b1', c: 2})
  * => {a: "a1", c: 2, b: "b1"}
