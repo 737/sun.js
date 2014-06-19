@@ -52,7 +52,7 @@ sun.util.array.removeAt = function(arrayList, numIndex) {
 };
 
 /**
-* 深入克隆
+* 深度克隆
 * => { name : 'sun' }
 * => { name : 'sun' }
 */
