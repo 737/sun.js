@@ -205,14 +205,15 @@ sun.validate = sun.validate || {
       return true;
     },
     /**
-     * sun.validate.value({string}, {object|JSON})
+     * sun.validate.value({string}, {object|JSON}, {repalce})
      * >> ('person.name.last', {person: { name: { first: 'sun', last: 'cms' }, age: 26 }})
      * => 'cms'
      * >> ('person.name.age', {person: { name: { first: 'sun', last: 'cms' }, age: 26 }})
      * => 'undefined'
+     * >> ('person.name.age', {person: { name: { first: 'sun', last: 'cms' }, age: 26 }}, 'suncms')
+     * => 'suncms'
      */
-    value: function (NSString, root) {
-        debugger;
+    value: function(NSString, root, repalce) {
         var nsPath = NSString.split("."),
             ns = root || window || {},
             root = ns;
@@ -221,6 +222,10 @@ sun.validate = sun.validate || {
             ns[nsPath[i]] = i + 1 === nsPath.length ? ns[nsPath[i]] : ns[nsPath[i]] || {};
             ns = ns[nsPath[i]];
         };
+
+        if (!ns && typeof repalce != 'undefined') {
+            ns = repalce;
+        }
 
         return ns;
     }
