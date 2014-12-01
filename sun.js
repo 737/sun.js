@@ -456,23 +456,63 @@ sun.key = (function() {
 })();
 
 
-// var __readyFuns = [];   
-// function DOMReady(){   
-//     for(var i=0,l=readyFuns.length;i&lt;l;i++){   
-//       readyFun();   
-//     }   
-//     readyFuns = null;   
-//     document.removeEventListener('DOMContentLoaded',DOMReady,false);   
-// };
-// sun.ready = function(fn){
-//     if(readyFuns.length == 0){   
-//        document.addEventListener('DOMContentLoaded',DOMReady,false);   
-//     }   
-//     readyFuns.push(fn);   
-// }  
-
+// 自动关闭窗口
+sun.autoBlur = function(nodeTrigger, nodeResult, fnblur) {
+    var isFirst = true,
+        self = this;
+    
+    function callBack(evt) {
+        // 第一次事件方法不执行
+        if (isFirst) {
+            isFirst = false;
+            return;
+        }
+        
+        // 再次点击的是 触发窗口中的元素
+        if (nodeTrigger && nodeTrigger.contains(evt.target)) {
+            self.event.remove('click', document, callBack);
+            return;
+        }
+        
+        // 点击的是 结果窗口中的元素
+        if (nodeResult && nodeResult.contains(evt.target)) {
+            'nothing';
+        } else {
+            (typeof fnblur == 'function') && fnblur();
+            self.event.remove('click', document, callBack);
+        }
+    };
+    
+    self.event.add('click', document, callBack);
+};
 
 sun.context = sun.context || {};
+
+sun.event = {
+    add: function (type, node, fun) {
+        var _addEvent = null;
+        
+        if (node.addEventListener) {
+            node.addEventListener(type, fun, false);
+        } else if(node.attachEvent){
+            node.attachEvent('on' + type, fun);
+        } else {
+            node['on' + type] = fun;
+        }
+        return _addEvent;
+    },
+    remove: function (type, node, fun) {
+        var rmEvent = null;
+    
+        if (node.removeEventListener) {
+            node.removeEventListener(type, fun, false);
+        } else if (node.detachEvent){
+            node.detachEvent('on' + type, fun);
+        } else {
+            node['on' + type] = null;
+        };
+    }
+};
 
 sun.context.getQueryStringByName = function(name) {
     var result = location.search.match(new RegExp("[\?\&]" + name + "=([^\&]+)", "i"));
@@ -560,22 +600,37 @@ sun.context.localStorage = (function(global) {
     return self;
 })(window);
 
-//-----------------------------  undealed  -----------------------------------
-function ___addEvent (type, element, fun) {
-    if (element.addEventListener) {
-        addEvent = function (type, element, fun) {
-            element.addEventListener(type, fun, false);
+sun.guid = function (len, radix) {
+    var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
+    var uuid = [], i;
+    radix = radix || chars.length;
+
+    if (len) {
+        // Compact form
+        for (i = 0; i < len; i++)
+            uuid[i] = chars[0 | Math.random() * radix];
+    } else {
+        // rfc4122, version 4 form
+        var r;
+
+        // rfc4122 requires these characters
+        uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
+        uuid[14] = '4';
+
+        // Fill in random data.  At i==19 set the high bits of clock sequence as
+        // per rfc4122, sec. 4.1.5
+        for (i = 0; i < 36; i++) {
+            if (!uuid[i]) {
+                r = 0 | Math.random() * 16;
+                uuid[i] = chars[(i == 19) ? (r & 0x3) | 0x8 : r];
+            }
         }
     }
-    else if(element.attachEvent){
-        addEvent = function (type, element, fun) {
-            element.attachEvent('on' + type, fun);
-        }
-    }
-    else{
-        addEvent = function (type, element, fun) {
-            element['on' + type] = fun;
-        }
-    }
-    return addEvent(type, element, fun);
-}
+
+    return uuid.join('');
+};
+
+define([], function () {
+    return sun;
+});
+
