@@ -1,13 +1,17 @@
-var sun = sun || {};
-sun.util = sun.util || {};
+// 独立不依赖任何其它类
+// author:  arleigh.lee@qq.com
+// date:    2014/01/01
 
-sun.util.array = {
-    /** sun.util.array.sort(arrayList, [bool]) 
-     * >> ([1,2,32,4])
-     * => [1, 2, 4, 32]
-     * >> ([1,2,32,4], false)
-     * => [32, 4, 2, 1]
-     */
+var sun = sun || {};
+
+sun.toolkit = sun.toolkit || {};
+
+sun.toolkit.array = {
+    // sun.toolkit.array.sort(arrayList, [bool]) 
+    // >> ([1,2,32,4])
+    // => [1, 2, 4, 32]
+    // >> ([1,2,32,4], false)
+    // => [32, 4, 2, 1]
     sort: function(arrayList, isAsc) {
         if (typeof isAsc != 'boolean') {
             isAsc = true;
@@ -25,16 +29,15 @@ sun.util.array = {
         return arrayList.sort(sortNumber);
     },
 
-    /** sun.util.array.removeAt(arrayList, *numIndex) 
-         * >> ([0, 11,22,33,44], 3)
-         * => [0, 11, 22, 44]
-         * >> ([0, 11,22,33,44], [2, 1, 0])
-         * => [33, 44]
-         */
+    // sun.toolkit.array.removeAt(arrayList, *numIndex) 
+    // >> ([0, 11,22,33,44], 3)
+    // => [0, 11, 22, 44]
+    // >> ([0, 11,22,33,44], [2, 1, 0])
+    // => [33, 44]
     removeAt: function(arrayList, numIndex) {
         if ( numIndex < 0 || typeof numIndex === 'undefined') {
             return arrayList;
-        } else if (sun.util.isArray(numIndex)) {
+        } else if (sun.toolkit.isArray(numIndex)) {
             var _index = 0;
 
             numIndex = this.sort(numIndex, false);
@@ -57,7 +60,7 @@ sun.util.array = {
 * => { name : 'sun' }
 * => { name : 'sun' }
 */
-sun.util.deepClone = function (jsonObj) {
+sun.toolkit.deepClone = function (jsonObj) {
     var buf;
 
     if (jsonObj instanceof Array) {
@@ -82,13 +85,12 @@ sun.util.deepClone = function (jsonObj) {
     }
 };
 
-
 /**
  * (destination, *sources) 
  * => ({a: 'a1', c: 1},{ b : 'b'}, { b: 'b1', c: 2})
  * => {a: "a1", c: 2, b: "b1"}
  */
-sun.util.extend = function(obj) {
+sun.toolkit.extend = function(obj) {
     this.each(arguments, function(source, index) {
         if ((index != 0)&&(!!source)) {
             for(var prop in source) {
@@ -108,10 +110,10 @@ sun.util.extend = function(obj) {
  * => aa a
  * => b2 b
  */
-sun.util.each = function(obj, iterator) {
+sun.toolkit.each = function(obj, iterator) {
     if ( obj === null) return;
     if (typeof iterator === 'function') {
-        if (sun.util.isArray(obj)) {
+        if (sun.toolkit.isArray(obj)) {
             for(var i = 0, max = obj.length; i < max; i++ ) {
                 iterator(obj[i], i);
             }
@@ -130,7 +132,7 @@ sun.util.each = function(obj, iterator) {
  * >> amtStr number
  * @return string
  */
-sun.util.formatIntNum = function (amtStr) {
+sun.toolkit.formatIntNum = function (amtStr) {
     var isInt = function (num) {
         return (num % 1 === 0)
     };
@@ -173,7 +175,7 @@ sun.util.formatIntNum = function (amtStr) {
  * >> (12000.235, 3)  * // TODO  有错误
  * => 12,000.24
  */
-sun.util.formatFloat = function (amtStr, isCurrency) {
+sun.toolkit.formatFloat = function (amtStr, isCurrency) {
     var isInt = function (num) {
         return (num % 1 === 0);
     };
@@ -220,7 +222,7 @@ sun.util.formatFloat = function (amtStr, isCurrency) {
  * => "3-10"
  * 注意M需要大写，其它字母小写
  */
-sun.util.formatTime = function (format, sTime) {
+sun.toolkit.formatTime = function (format, sTime) {
     var _this = new Date();
 
     if (!!sTime) {
@@ -259,7 +261,7 @@ sun.util.formatTime = function (format, sTime) {
  * >> ('hh:mm:ss yy/MM/dd');
  * => "10:51:19 13/12/04"
  */
-sun.util.getCurrentTime = function(sStyle) {
+sun.toolkit.getCurrentTime = function(sStyle) {
     return this.formatTime(sStyle, null);
 };
 
@@ -268,7 +270,7 @@ sun.util.getCurrentTime = function(sStyle) {
  * >> ('&lt;span&gt;I am Hero!&lt;/span&gt;')
  * => '<span>I am Hero!</span>'
  */
-sun.util.htmlDecode = function(html) {
+sun.toolkit.htmlDecode = function(html) {
     var a = document.createElement( 'a' ); a.innerHTML = html;
     return a.textContent;
 };
@@ -278,7 +280,7 @@ sun.util.htmlDecode = function(html) {
  * >> ('<span>I am Hero!</span>')
  * => '&lt;span&gt;I am Hero!&lt;/span&gt;'
  */
-sun.util.htmlEncode = function ( html ) {
+sun.toolkit.htmlEncode = function ( html ) {
     return document.createElement( 'a' ).appendChild( 
         document.createTextNode( html ) ).parentNode.innerHTML;
 };
@@ -287,7 +289,7 @@ sun.util.htmlEncode = function ( html ) {
  * >> ("3333", 33)
  * => 333
  */
-sun.util.parseToInt = function(obj, defaultNum, radix){
+sun.toolkit.parseToInt = function(obj, defaultNum, radix){
     var _t = 0;
     if (typeof radix != 'number'){
         radix = 10;
@@ -301,16 +303,15 @@ sun.util.parseToInt = function(obj, defaultNum, radix){
     return _t;
 };
 
-/**
- * >> ('I am a boy', 'boy', 'girl')
- * => "I am a girl" 
- */
-sun.util.replaceAll = function (oString, AFindText, ARepText) {
+// 
+// >> ('I am a boy', 'boy', 'girl')
+// => "I am a girl" 
+sun.toolkit.replaceAll = function (oString, AFindText, ARepText) {
     var raRegExp = new RegExp(AFindText.replace(/([\(\)\[\]\{\}\^\$\+\-\*\?\.\"\'\|\/\\])/g, "\\$1"), "ig");
     return oString.replace(raRegExp, ARepText);
 };
 
-sun.util.reload = function() {
+sun.toolkit.reload = function() {
     window.location.reload();
 
     /* other ways
@@ -325,36 +326,29 @@ sun.util.reload = function() {
     */
 };
 
-/**
- * >> ('best {0} for {1}', 'wish', 'you')
- * => "best wish for you"
- */
-sun.util.stringFormat = function(txt) {
-    var arg = arguments,
-        matchResult,
-        matLength,
-        str = txt,
-        reg = /\{\d+?\}/gmi,
-        i;
-
-    matchResult = str.match(reg);
-    if (matchResult) {
-        matLength = matchResult.length;
-        if (arg.length >= matLength) {
-            for (i = 0; i < matLength; i++) {
-                str = str.replace(matchResult[i], arg[i + 1]);
-            }
-        }
+// sun.util.stringFormat(string, augments)
+// >> sun.toolkit.stringFormat('{2} {0} {1}, and best {0} for {1}', 'wish', 'you', 'I')
+// => "I wish you, and best wish for you."
+sun.toolkit.stringFormat = function(txt) {
+    var reg = new RegExp(/\{(\d+?)\}/i);
+    var match = null;
+    var idx = 0,
+        val = null;
+    
+    while ((match = reg.exec(txt)) != null) {
+        idx = (match[1] | 0) + 1;
+        val = (typeof arguments[idx] != 'undefined') ? arguments[idx] : '';
+        
+        txt = txt.replace(match[0], val);
     }
 
-    return str;
+    return txt;
 };
 
-/**
- * >> (12341234)
- * => "Thur Jan 1 1970 11:25"
- */
-sun.util.transforTime = function (time) {
+// sun.toolkit.transforTime()
+// >> (12341234)
+// => "Thur Jan 1 1970 11:25"
+sun.toolkit.transforTime = function (time) {
     var date = parseInt(time);
     var weekdays = ["Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat"];
     var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
@@ -373,8 +367,7 @@ sun.util.transforTime = function (time) {
     return result;
 };
 
-
-sun.util.parseURL = function (url) {
+sun.toolkit.parseURL = function (url) {
     var a =  document.createElement('a');
     a.href = url;
     
@@ -402,13 +395,3 @@ sun.util.parseURL = function (url) {
         segments: a.pathname.replace(/^\//,'').split('/')
     };
 };
-
-
-//数组删除任意位置
-// b = [1,2,3,4,5];
-// b.baoremove(5);
-// Array.prototype.baoremove = function(dx)
-// {
-//     if(isNaN(dx)||dx>this.length){return false;}
-//     this.splice(dx,1);
-// }

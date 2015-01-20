@@ -1,22 +1,22 @@
+// 独立不依赖任何其它类
+// author: arleigh.lee@qq.com
+
 var sun = sun || {};
 
 sun.validate = sun.validate || {
 
-    /**
-     * >> (4)
-     * => true
-     * >> (3)
-     * => false
-     */
+    // >> (4)
+    // => true
+    // >> (3)
+    // => false
     isEven: function(num) {
         return num % 2 == 0 ? true : false;
     },
-    /**
-     * >> ([])
-     * => true
-     * >> ({})
-     * => false
-     */
+    
+    // >> ([])
+    // => true
+    // >> ({})
+    // => false
     isArray: function(arg) {
         // first way:
         return Object.prototype.toString.call(arg) === '[object Array]';
@@ -44,10 +44,12 @@ sun.validate = sun.validate || {
       var reg = /^[a-zA-Z0-9]{6,20}$/;
       return reg.test(text);
     },
+    
     isMobile: function(text) {
       var reg = /^(1[3-8][0-9])\d{8}$/;
       return reg.test(text);
     },
+    
     isChinese: function(text) {
       var reg = /^[\u4e00-\u9fff]{0,}$/;
       return reg.test(text);
@@ -68,10 +70,12 @@ sun.validate = sun.validate || {
       }
       return true;
     },
+    
     isCellPhone: function(text) {
       var re = /(^0{0,1}1[3|4|5|6|7|8][0-9]{9}$)/;
       return re.test(text);
     },
+    
     isIDCardNo: function(text) {
       var reg = /^[A-Za-z0-9]+$/;
       return reg.test(text);
@@ -165,16 +169,16 @@ sun.validate = sun.validate || {
     isQq: function(target){
       return /^[1-9]\d{4,}$/.test(target);
     },
+    
     isPhone: function(target){
       return /^[0-9]{3,4}-[0-9]{7,8}$/.test(target);
     },
-    /**
-     * sun.validate.isUrl({string})
-     * >> ('/tuan/a.html')
-     * => false
-     * >> ('http://www.baidu.com')
-     * => true
-     */
+    
+    // sun.validate.isUrl({string})
+    // >> ('/tuan/a.html')
+    // => false
+    // >> ('http://www.baidu.com')
+    // => true
     isUrl: function(target){
       return /^http(s)?:\/\/[A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&_~`@[\]\:+!]*([^<>])*$/.test(target);
     },
@@ -228,15 +232,27 @@ sun.validate = sun.validate || {
 
       return true;
     },
-    /**
-     * sun.validate.value({string}, {object|JSON}, {repalce})
-     * >> ('person.name.last', {person: { name: { first: 'sun', last: 'cms' }, age: 26 }})
-     * => 'cms'
-     * >> ('person.name.age', {person: { name: { first: 'sun', last: 'cms' }, age: 26 }})
-     * => 'undefined'
-     * >> ('person.name.age', {person: { name: { first: 'sun', last: 'cms' }, age: 26 }}, 'suncms')
-     * => 'suncms'
-     */
+    
+    isLeftClick: function(evt) {
+        var evt = window.event || evt;
+        var val = evt.button,
+            result = true;
+        
+        // 用户点击的是右建
+        if(val == 2 || val ==3) {
+            result = false;
+        }
+        
+        return result;
+    },
+    
+    // sun.validate.value({string}, {object|JSON}, {repalce})
+    // >> ('person.name.last', {person: { name: { first: 'sun', last: 'cms' }, age: 26 }})
+    // => 'cms'
+    // >> ('person.name.age', {person: { name: { first: 'sun', last: 'cms' }, age: 26 }})
+    // => 'undefined'
+    // >> ('person.name.age', {person: { name: { first: 'sun', last: 'cms' }, age: 26 }}, 'suncms')
+    // => 'suncms'
     value: function(NSString, root, repalce) {
         var nsPath = NSString.split("."),
             ns = root || window || {},
