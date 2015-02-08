@@ -271,11 +271,10 @@ sun.toolkit = {
             return window.event; //如果是ie
         }
         func = getEvent.caller;
-        while (func != null) {
+        while (func !== null) {
             var arg0 = func.arguments[0];
             if (arg0) {
-                if ((arg0.constructor == Event || arg0.constructor == MouseEvent)
-        || (typeof (arg0) == "object" && arg0.preventDefault && arg0.stopPropagation)) {
+                if ((arg0.constructor == Event || arg0.constructor == MouseEvent) || (typeof (arg0) == "object" && arg0.preventDefault && arg0.stopPropagation)) {
                     return arg0;
                 }
             }
@@ -306,19 +305,30 @@ sun.toolkit = {
            javascriptVersion = '1.1';
            if (javascriptVersion.match) {
                javascriptVersion = '1.2';
-               var tm = new Date;
+               var tm = new Date();
                if (tm.setUTCDate) {
                    javascriptVersion = '1.3';
                    if (isie && ismac && apv >= 5) javascriptVersion = '1.4';
                    var pn = 0;
                    if (pn.toPrecision) {
                        javascriptVersion = '1.5';
-                       a = new Array;
+                       a = [];
                        if (a.forEach) {
                            javascriptVersion = '1.6';
                            i = 0;
-                           o = new Object;
-                           tcf = new Function('o', 'var e,i=0;try{i=new Iterator(o)}catch(e){}return i');
+                           o = {};
+                           // tcf = new Function('o', 'var e,i=0;try{i=new Iterator(o)}catch(e){}return i');
+                           tcf = function (o) {
+                               var e, i=0;
+                               
+                               try {
+                                   i = new Iterator(o);
+                               } catch(err) {
+                                   
+                               }
+                               
+                               return i;
+                           };
                            i = tcf(o);
                            if (i && i.next) {
                                javascriptVersion = '1.7';
