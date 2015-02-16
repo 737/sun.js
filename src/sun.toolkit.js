@@ -474,7 +474,7 @@ sun.toolkit = {
 };
 
 if (typeof require === 'function') {
-    define([getPath('sun.validate.js')], function(validate) {
+    define([sun._getPath('sun.validate.js')], function(validate) {
         return sun.toolkit;
     });
 }
