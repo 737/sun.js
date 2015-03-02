@@ -16,6 +16,14 @@ sun.validate = sun.validate || {
         //return (arr instanceof Array);
     },
     
+    isObject: function(arg) {
+        // first way:
+        return Object.prototype.toString.call(arg) === '[object Object]';
+        
+        // second way:
+        //return (arr instanceof Object);
+    },
+    
     isAllowSetTradingPass: function(text) {
       var case1 = true; //数字相同验证
       var case2 = true; //连续数字验证
@@ -287,12 +295,8 @@ sun.validate = sun.validate || {
     // => 'suncms'
     value: function(NSString, root, repalce) {
         var nsPath = NSString.split("."),
-            ns = root || window || {};
-            
-            console.log(12341234);
-            
-        root = ns;
-
+            ns = sun.toolkit.deepClone(root) || window || {};
+        
         for (var i = 0, len = nsPath.length; i < len; i++) {
             ns[nsPath[i]] = i + 1 === nsPath.length ? ns[nsPath[i]] : ns[nsPath[i]] || {};
             ns = ns[nsPath[i]];
