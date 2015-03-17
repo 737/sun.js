@@ -781,14 +781,4 @@ sun._getPath = function (sPath) {
     }
 };
 
-if (typeof require === 'function') {
-    define([sun._getPath('sun.toolkit.js'), sun._getPath('sun.validate.js'), sun._getPath('sun.md.js')], function() {
-        return sun;
-    });
-}
-
-
-
-
-
 
