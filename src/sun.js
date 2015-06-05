@@ -502,7 +502,7 @@ sun.event = {
 sun.context.getQueryStringByName = function(name) {
     var result = location.search.match(new RegExp("[\?\&]" + name + "=([^\&]+)", "i"));
 
-    if (result || result.length < 1) {
+    if (!result || result.length < 1) {
         return "";
     }
 
